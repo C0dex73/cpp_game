@@ -2,16 +2,17 @@
 SRC_DIR=./src
 BIN_DIR=./bin
 BUILD_DIR=./build
-EXEC=app.exe
-C=YOUR COMPILER HERE
-SRCEXTENSION=YOUR LANGUAGE EXTENSION HERE (e.g. c, cpp)
+EXEC=game.exe
+C=g++
+SRCEXTENSION=.cpp
+OBJEXTENSION=.cpp.o
 CFLAGS=
 C2OFLAGS=-W
 O2EXEFLAGS=
-RAW_SRC_FILES_PATH=$(wildcard $(SRC_DIR)/*.$(SRCEXTENSION))
+RAW_SRC_FILES_PATH=$(wildcard $(SRC_DIR)/*$(SRCEXTENSION))
 SOURCE_FILES=$(RAW_SRC_FILES_PATH:$(SRC_DIR)/%=%)
 SRC=$(foreach file, $(SOURCE_FILES), $(SRC_DIR)/$(file))
-OBJ=$(foreach file, $(SOURCE_FILES), $(BIN_DIR)/$(file:.$(SRCEXTENSION)=.o))
+OBJ=$(foreach file, $(SOURCE_FILES), $(BIN_DIR)/$(file:$(SRCEXTENSION)=$(OBJEXTENSION)))
 
 #~run command arguments parsing into RUN_ARGS
 ifneq (,$(filter $(firstword $(MAKECMDGOALS)), run fullauto))
@@ -26,10 +27,10 @@ all: $(BIN_DIR)_dir $(BIN_DIR)/$(EXEC)
 $(BIN_DIR)/$(EXEC): $(OBJ)
 	$(C) $(CFLAGS) -o $@ $^ $(O2EXEFLAGS)
 
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.$(SRCEXTENSION) $(SRC_DIR)/%.h
+$(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION) $(SRC_DIR)/%.h
 	$(C) $(CFLAGS) -c -o $@ $< $($@) $(C2OFLAGS)
 
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.$(SRCEXTENSION)
+$(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION)
 	$(C) $(CFLAGS) -c -o $@ $< $(C2OFLAGS)
 
 #~UTILS
@@ -37,7 +38,7 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.$(SRCEXTENSION)
 .PHONY: clean reset build fullauto rbin rbuild run
 
 clean:
-	rm -rf $(BIN_DIR)/*.o
+	rm -rf $(BIN_DIR)/*$(OBJEXTENSION)
 
 reset:
 	rm -rf $(BIN_DIR)
