@@ -6,9 +6,9 @@ EXEC=game.exe
 C=g++
 SRCEXTENSION=.cpp
 OBJEXTENSION=.cpp.o
-CFLAGS=
+CFLAGS=-std=c++17 
 C2OFLAGS=-W
-O2EXEFLAGS=
+O2EXEFLAGS=-lglew32 -lglu32 -lglfw3 -lopengl32
 RAW_SRC_FILES_PATH=$(wildcard $(SRC_DIR)/*$(SRCEXTENSION))
 SOURCE_FILES=$(RAW_SRC_FILES_PATH:$(SRC_DIR)/%=%)
 SRC=$(foreach file, $(SOURCE_FILES), $(SRC_DIR)/$(file))
