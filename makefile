@@ -46,6 +46,10 @@ reset:
 
 build: all $(BUILD_DIR)_dir
 	cp $(BIN_DIR)/*.exe $(BUILD_DIR)
+#^remove created files if wanted clean
+ifeq (clean,$(firstword $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))))
+	rm -rf $(BIN_DIR)
+endif
 
 fullauto: build
 	$(BUILD_DIR)/$(EXEC) $(RUN_ARGS)
