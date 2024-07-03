@@ -14,10 +14,10 @@ namespace cdxg {
         unsigned int FshaderID;
         const unsigned int shaderProgramID;
         protected:
-        glm::vec3 *const vertices;
+        glm::vec2 *const vertices;
         unsigned int verticesCount;
         public:
-        Displayable(glm::vec3 *_vertices, unsigned int _verticesCount);
+        Displayable(glm::vec2 *_vertices, unsigned int _verticesCount);
         friend std::ostream& operator<<(std::ostream& os, cdxg::Displayable const d);
         //void Rotate(float angle);
         void draw();

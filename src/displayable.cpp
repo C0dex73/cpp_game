@@ -9,7 +9,7 @@
 #include "triangle.h"
 #include "shaders.h"
 
-cdxg::Displayable::Displayable(glm::vec3 *_vertices, unsigned int _verticesCount)
+cdxg::Displayable::Displayable(glm::vec2 *_vertices, unsigned int _verticesCount)
     : vertices(_vertices), shaderProgramID(glCreateProgram()), verticesCount(_verticesCount){
 
     //openGL Shaders processing
@@ -57,7 +57,7 @@ cdxg::Displayable::Displayable(glm::vec3 *_vertices, unsigned int _verticesCount
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     glBufferData(GL_ARRAY_BUFFER, 3*sizeof(*vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 3*sizeof(vertices->x), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 2*sizeof(vertices->x), (void*)0);
     glEnableVertexAttribArray(0);
 }
 

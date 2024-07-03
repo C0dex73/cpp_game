@@ -7,14 +7,14 @@
 #include "displayable.h"
 #include "triangle.h"
 
-cdxg::Triangle::Triangle(glm::vec3 center, float length, float rotation, lengthType lt)
+cdxg::Triangle::Triangle(glm::vec2 center, float length, float rotation, lengthType lt)
     : Displayable(verticesConstructor(center, length, rotation, lt), 3){
     //! Triangle constructor after Displayable constructor here
 }
 
-glm::vec3 *cdxg::Triangle::verticesConstructor(glm::vec3 center, float length, float rotation, lengthType lt){
-    static glm::vec3 _vertices[3];
-    glm::vec3 point = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec2 *cdxg::Triangle::verticesConstructor(glm::vec2 center, float length, float rotation, lengthType lt){
+    static glm::vec2 _vertices[3];
+    glm::vec2 point = glm::vec2(0.0f, 0.0f);
     if(lt == lengthType::Edge){
         point.y += length / sqrt(1.5f);
     }else if(lt == lengthType::Inner){
@@ -25,7 +25,7 @@ glm::vec3 *cdxg::Triangle::verticesConstructor(glm::vec3 center, float length, f
     }
 
     for(unsigned int i = 0; i < 3; i++){
-        _vertices[i] = center + glm::rotate(point, glm::radians(i*120.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        _vertices[i] = center + glm::rotate(point, glm::radians(i*120.0f));
     }
 
     return _vertices;

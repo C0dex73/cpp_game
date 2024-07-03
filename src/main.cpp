@@ -56,7 +56,7 @@ int main(){
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
     glClearColor(1, 0, 1, 1);
-    cdxg::Triangle t = cdxg::Triangle(glm::vec3(0.0f, 0.0f, 0.0f), 0.5f, 0.0f, cdxg::Triangle::Inner);
+    cdxg::Triangle t = cdxg::Triangle(glm::vec2(0.0f, 0.0f), 0.5f, 0.0f, cdxg::Triangle::Inner);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     //^ Main loop
     do{
