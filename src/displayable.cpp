@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
-#include <vector>
 #include <iostream>
 #include "displayable.h"
 #include "triangle.h"
@@ -56,7 +55,7 @@ cdxg::Displayable::Displayable(glm::vec2 *_vertices, unsigned int _verticesCount
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    glBufferData(GL_ARRAY_BUFFER, 3*sizeof(*vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3*sizeof(*vertices), vertices, GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, false, 2*sizeof(vertices->x), (void*)0);
     glEnableVertexAttribArray(0);
 }
@@ -69,11 +68,14 @@ std::ostream& cdxg::operator<<(std::ostream& os, cdxg::Displayable const d){
     return os;
 }
 
-/*void cdxg::Displayable::Rotate(float angle){
-    for(int i = 0; i <= vertices->capacity()-1; i++){
-        glm::rotate(*(vertices->at(i)), angle);
+void cdxg::Displayable::rotate(float angle){
+    for(unsigned int i = 0; i < verticesCount; i++){
+        vertices[i] = glm::rotate(vertices[i], angle);
     }
-}*/
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, 3*sizeof(*vertices), vertices, GL_DYNAMIC_DRAW);
+}
 
 void cdxg::Displayable::draw(){
     glUseProgram(shaderProgramID);

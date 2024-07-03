@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <chrono>
 #include "triangle.h"
 
 
@@ -14,6 +15,16 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+}
+
+template <
+    class result_t   = std::chrono::milliseconds,
+    class clock_t    = std::chrono::steady_clock,
+    class duration_t = std::chrono::milliseconds
+>
+auto since(std::chrono::time_point<clock_t, duration_t> const& start)
+{
+    return std::chrono::duration_cast<result_t>(clock_t::now() - start);
 }
 
 /**
@@ -58,14 +69,19 @@ int main(){
     glClearColor(1, 0, 1, 1);
     cdxg::Triangle t = cdxg::Triangle(glm::vec2(0.0f, 0.0f), 0.5f, 0.0f, cdxg::Triangle::Inner);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    std::chrono::steady_clock::time_point begin;
     //^ Main loop
     do{
+        begin = std::chrono::steady_clock::now();
         glClear(GL_COLOR_BUFFER_BIT);
 
         t.draw();
+        t.rotate(glm::radians(1.0f));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        while(since(begin).count() < 16) {}
     }while( glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0 );
 
     //exit
