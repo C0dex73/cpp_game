@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include "triangle.h"
 
 
 /**
@@ -20,44 +20,49 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
  * The main function, called when the executable lauches
  */
 int main(){
-
     // initialize glfw
     if( !glfwInit() )
     {
         fprintf( stderr, "Failed to initialize GLFW.\r\n" );
         return -1;
     }
-
+    
     // opengl context
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 4.5
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // creates the window
-    GLFWwindow *window = glfwCreateWindow(1024, 768, "Test1", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "CDXG", NULL, NULL);
     if( !window ) {
-        fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible.\r\n");
+        fprintf(stderr, "Failed to open GLFW window.\r\n");
         glfwTerminate();
         return -1;
     }
 
     // tells opengl wich window to operate on
     glfwMakeContextCurrent(window);
+    gladLoadGL();
     glViewport(0, 0, 800, 600);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    // initialize glew
-    if (glewInit() != 0) {
-        fprintf(stderr, "Failed to initialize GLEW\n");
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
+    //Initialize glad
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        fprintf(stderr, "Failed to initialize GLAD\r\n");
         return -1;
-    }
+    }   
 
     // initialize Uinput
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
+    glClearColor(1, 0, 1, 1);
+    cdxg::Triangle t = cdxg::Triangle(glm::vec3(0.0f, 0.0f, 0.0f), 0.5f, 0.0f, cdxg::Triangle::Inner);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     //^ Main loop
     do{
         glClear(GL_COLOR_BUFFER_BIT);
+
+        t.draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
