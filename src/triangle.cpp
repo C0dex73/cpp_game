@@ -7,9 +7,13 @@
 #include "displayable.h"
 #include "triangle.h"
 
-cdxg::Triangle::Triangle(glm::vec2 center, float length, float rotation, lengthType lt)
-    : Displayable(verticesConstructor(center, length, rotation, lt), 3){
-    //! Triangle constructor after Displayable constructor here
+cdxg::Triangle::Triangle(glm::vec2 _center, float length, float rotation, lengthType lt)
+    : Displayable(verticesConstructor(_center, length, rotation, lt), 3, GL_DYNAMIC_DRAW){
+    center = _center;
+}
+
+glm::vec2 *cdxg::Triangle::getCenter(){
+    return &center;
 }
 
 glm::vec2 *cdxg::Triangle::verticesConstructor(glm::vec2 center, float length, float rotation, lengthType lt){

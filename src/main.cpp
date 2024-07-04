@@ -67,7 +67,7 @@ int main(){
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
     glClearColor(1, 0, 1, 1);
-    cdxg::Triangle t = cdxg::Triangle(glm::vec2(0.0f, 0.0f), 0.5f, 0.0f, cdxg::Triangle::Inner);
+    cdxg::Triangle t = cdxg::Triangle(glm::vec2(0.2f, 0.0f), 0.2f, 0.0f, cdxg::Triangle::Inner);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     std::chrono::steady_clock::time_point begin;
     //^ Main loop
@@ -76,7 +76,11 @@ int main(){
         glClear(GL_COLOR_BUFFER_BIT);
 
         t.draw();
-        t.rotate(glm::radians(1.0f));
+
+        if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+            t.rotate(glm::radians(1.0f), t.getVertex(1));
+        }
+        
 
         glfwSwapBuffers(window);
         glfwPollEvents();

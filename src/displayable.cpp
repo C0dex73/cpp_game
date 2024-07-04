@@ -8,8 +8,17 @@
 #include "triangle.h"
 #include "shaders.h"
 
-cdxg::Displayable::Displayable(glm::vec2 *_vertices, unsigned int _verticesCount)
-    : vertices(_vertices), shaderProgramID(glCreateProgram()), verticesCount(_verticesCount){
+inline void cdxg::Displayable::refreshVertices(){
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, 3*sizeof(*vertices), vertices, type);
+}
+
+cdxg::Displayable::Displayable(glm::vec2 *_vertices, unsigned int _verticesCount, unsigned int _type)
+    : vertices(_vertices),
+    shaderProgramID(glCreateProgram()),
+    verticesCount(_verticesCount),
+    type(_type){
 
     //openGL Shaders processing
     VshaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -68,17 +77,26 @@ std::ostream& cdxg::operator<<(std::ostream& os, cdxg::Displayable const d){
     return os;
 }
 
-void cdxg::Displayable::rotate(float angle){
+void cdxg::Displayable::rotate(float angle, glm::vec2 *center){
     for(unsigned int i = 0; i < verticesCount; i++){
-        vertices[i] = glm::rotate(vertices[i], angle);
+        vertices[i] = *center + glm::rotate(vertices[i] - *center, angle);
     }
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 3*sizeof(*vertices), vertices, GL_DYNAMIC_DRAW);
+
+
+
+    refreshVertices();
 }
 
 void cdxg::Displayable::draw(){
     glUseProgram(shaderProgramID);
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+glm::vec2 *cdxg::Displayable::getVertex(unsigned int n){
+    if(n >= verticesCount){
+        fprintf(stderr, "Requested vertex number %s doesnt exist", n);
+        return new glm::vec2(0.0f, 0.0f);
+    }
+    return vertices + n;
 }
