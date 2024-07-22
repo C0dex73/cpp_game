@@ -5,7 +5,6 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <iostream>
 #include "displayable.h"
-#include "triangle.h"
 
 inline void cdxg::Displayable::refreshVertices(){
     glBindVertexArray(VAO);
