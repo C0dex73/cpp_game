@@ -19,7 +19,7 @@ namespace cdxg {
         glm::vec2 *const vertices;
         unsigned int verticesCount;
         public:
-        Displayable(glm::vec2 *_vertices, unsigned int _verticesCount, unsigned int _type);
+        Displayable(glm::vec2 *_vertices, unsigned int _verticesCount, unsigned int _type, const char *vs_shader, const char *fs_shader);
         friend std::ostream& operator<<(std::ostream& os, cdxg::Displayable const d);
         void rotate(float angle, glm::vec2 *center = new glm::vec2(0.0f, 0.0f));
         void draw();

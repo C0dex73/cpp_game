@@ -6,7 +6,6 @@
 #include <iostream>
 #include "displayable.h"
 #include "triangle.h"
-#include "shaders.h"
 
 inline void cdxg::Displayable::refreshVertices(){
     glBindVertexArray(VAO);
@@ -14,7 +13,7 @@ inline void cdxg::Displayable::refreshVertices(){
     glBufferData(GL_ARRAY_BUFFER, 3*sizeof(*vertices), vertices, type);
 }
 
-cdxg::Displayable::Displayable(glm::vec2 *_vertices, unsigned int _verticesCount, unsigned int _type)
+cdxg::Displayable::Displayable(glm::vec2 *_vertices, unsigned int _verticesCount, unsigned int _type, const char *vs_shader, const char *fs_shader)
     : vertices(_vertices),
     shaderProgramID(glCreateProgram()),
     verticesCount(_verticesCount),
@@ -24,7 +23,7 @@ cdxg::Displayable::Displayable(glm::vec2 *_vertices, unsigned int _verticesCount
     VshaderID = glCreateShader(GL_VERTEX_SHADER);
     FshaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-    glShaderSource(VshaderID, 1, &cxdg_shaders::vs_source, NULL);
+    glShaderSource(VshaderID, 1, &vs_shader, NULL);
     glCompileShader(VshaderID);
     int success;
     char infoLog[512];
@@ -35,7 +34,7 @@ cdxg::Displayable::Displayable(glm::vec2 *_vertices, unsigned int _verticesCount
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
-    glShaderSource(FshaderID, 1, &cxdg_shaders::fs_source, NULL);
+    glShaderSource(FshaderID, 1, &fs_shader, NULL);
     glCompileShader(FshaderID);
     glGetShaderiv(FshaderID, GL_COMPILE_STATUS, &success);
     if(!success)
@@ -82,8 +81,6 @@ void cdxg::Displayable::rotate(float angle, glm::vec2 *center){
         vertices[i] = *center + glm::rotate(vertices[i] - *center, angle);
     }
 
-
-
     refreshVertices();
 }
 
@@ -98,5 +95,5 @@ glm::vec2 *cdxg::Displayable::getVertex(unsigned int n){
         fprintf(stderr, "Requested vertex number %s doesnt exist", n);
         return new glm::vec2(0.0f, 0.0f);
     }
-    return vertices + n;
+    return &vertices[n];
 }

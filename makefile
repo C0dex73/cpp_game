@@ -98,8 +98,6 @@ $(BIN_DIR)_dir :
 
 #~EXPLICIT DEPENDENCIES
 
-$(SRC_DIR)/displayable.cpp.o : $(SRC_DIR)/$(INCLUDE)/shaders.h
-
 #~DEBUG
 debug:
 	@echo There is no debug script written in $(CURDIR)/makefile :: debug

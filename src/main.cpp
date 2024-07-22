@@ -3,7 +3,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <chrono>
-#include "triangle.h"
+#include <vector>
+#include <math.h>
 
 
 /**
@@ -44,7 +45,7 @@ int main(){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // creates the window
-    GLFWwindow *window = glfwCreateWindow(800, 600, "CDXG", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(800, 800, "CDXG", NULL, NULL);
     if( !window ) {
         fprintf(stderr, "Failed to open GLFW window.\r\n");
         glfwTerminate();
@@ -54,7 +55,7 @@ int main(){
     // tells opengl wich window to operate on
     glfwMakeContextCurrent(window);
     gladLoadGL();
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, 800, 800);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
     //Initialize glad
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -65,21 +66,12 @@ int main(){
 
     // initialize Uinput
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
-
-    glClearColor(1, 0, 1, 1);
-    cdxg::Triangle t = cdxg::Triangle(glm::vec2(0.2f, 0.0f), 0.2f, 0.0f, cdxg::Triangle::Inner);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
     std::chrono::steady_clock::time_point begin;
     //^ Main loop
     do{
         begin = std::chrono::steady_clock::now();
         glClear(GL_COLOR_BUFFER_BIT);
-
-        t.draw();
-
-        if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
-            t.rotate(glm::radians(1.0f), t.getVertex(1));
-        }
         
 
         glfwSwapBuffers(window);
