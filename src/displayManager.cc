@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <string>
+#include <glad/glad.h>
 
 namespace cdxg {
 
@@ -30,8 +31,16 @@ namespace cdxg {
         glfwFocusWindow(mpsWindow);
         glfwWindowHint(GLFW_RESIZABLE, 0);
 
-        //init opengl
+
+
+        //init opengl and glad
         glfwMakeContextCurrent(mpsWindow);
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        {
+            fprintf(stderr, "Failed to initialize GLAD.\r\n");
+            glfwTerminate();
+            return;
+        } // if glad cant init
         glViewport(0, 0, 800, 800);
     } // void CloseWindow()
 
