@@ -6,10 +6,11 @@ EXEC=cdxg.exe
 TEST_EXEC=test.exe
 TEST_SUBEXT=.test
 C=g++
-SRCEXTENSION=.cpp
-OBJEXTENSION=.cpp.o
-INCLUDE=include
-CFLAGS=-std=c++17 -I./include
+SRCEXTENSION=.cc
+OBJEXTENSION=.cc.o
+INCLUDE=./include
+HEADEREXTENSION=.hh
+CFLAGS=-mwindows -Wall -std=c++17 -I./include
 C2OFLAGS=-W
 ADDITIONALOBJFILES=lib/glad.o
 O2EXEFLAGS=-lglew32 -lglu32 -lglfw3 -lopengl32 
@@ -36,7 +37,7 @@ all: $(BIN_DIR)_dir $(BIN_DIR)/$(EXEC) $(BIN_DIR)/$(TEST_EXEC)
 $(BIN_DIR)/$(EXEC): $(OBJ)
 	$(C) $(CFLAGS) -o $@ $^ $(ADDITIONALOBJFILES) $(O2EXEFLAGS)
 
-$(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION) $(SRC_DIR)/$(INCLUDE)/%.h
+$(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION) $(INCLUDE)/%($HEADEREXTENSION)
 	$(C) $(CFLAGS) -c -o $@ $< $($@) $(C2OFLAGS)
 
 $(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION)
