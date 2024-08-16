@@ -6,8 +6,8 @@
 namespace cdxg {
     class Shader {
         public:
-        GLuint mShaderProgramId;
-        Shader(std::string *vertexShader, std::string *fragmentShader);
+        const unsigned int mShaderProgramId;
+        Shader(std::string *pstrVertexShader, std::string *pstrFragmentShader);
         ~Shader();
 
     }; // class Shader
