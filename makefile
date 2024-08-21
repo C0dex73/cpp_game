@@ -10,12 +10,15 @@ SRCEXTENSION=.cc
 OBJEXTENSION=.cc.o
 INCLUDE=./include
 HEADEREXTENSION=.hh
+SHADER_DIR=./assets
+SHADER_EXTENSION=.glsl
 CFLAGS=-mwindows -Wall -std=c++17 -I./include
 C2OFLAGS=-W
 ADDITIONALOBJFILES=lib/glad.o
-O2EXEFLAGS=-lglew32 -lglu32 -lglfw3 -lopengl32 
+O2EXEFLAGS=-lglfw3 -lopengl32
 
 #~PROCESSED VAR
+SHADER_FILES=$(wildcard $(SHADER_DIR)/*$(SHADER_EXTENSION))
 RAW_SRC_FILES_PATH=$(wildcard $(SRC_DIR)/*$(SRCEXTENSION))
 SOURCE_FILES=$(foreach file, $(RAW_SRC_FILES_PATH:$(SRC_DIR)/%=%), $(if $(findstring $(TEST_SUBEXT),$(file)),,$(file)))
 SRC=$(foreach file, $(SOURCE_FILES), $(SRC_DIR)/$(file))
@@ -34,17 +37,17 @@ endif
 
 all: $(BIN_DIR)_dir $(BIN_DIR)/$(EXEC) $(BIN_DIR)/$(TEST_EXEC)
 
-$(BIN_DIR)/$(EXEC): $(OBJ)
-	$(C) $(CFLAGS) -o $@ $^ $(ADDITIONALOBJFILES) $(O2EXEFLAGS)
+$(BIN_DIR)/$(EXEC): $(OBJ) $(ADDITIONALOBJFILES)
+	$(C) $(CFLAGS) -o $@ $^ $(O2EXEFLAGS)
 
-$(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION) $(INCLUDE)/%($HEADEREXTENSION)
+$(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION) $(INCLUDE)/%$(HEADEREXTENSION)
 	$(C) $(CFLAGS) -c -o $@ $< $($@) $(C2OFLAGS)
 
 $(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION)
 	$(C) $(CFLAGS) -c -o $@ $< $(C2OFLAGS)
 
 $(BIN_DIR)/$(TEST_EXEC): $(TEST_OBJ)
-	$(C) $(CFLAGS) -o $@ $^ $(ADDITIONALOBJFILES) $(O2EXEFLAGS)
+	$(C) $(CFLAGS) -o $@ $^ $(O2EXEFLAGS)
 
 $(BIN_DIR)/%$(TEST_SUBEXT)$(OBJEXTENSION) : $(SRC_DIR)/%$(TEST_SUBEXT)$(SRCEXTENSION) $(SRC_DIR)/$(INCLUDE)/%$(TEST_SUBEXT).h
 	$(C) $(CFLAGS) -c -o $@ $< $($@) $(C2OFLAGS)
@@ -98,6 +101,9 @@ $(BIN_DIR)_dir :
 	mkdir $(BIN_DIR) -p
 
 #~EXPLICIT DEPENDENCIES
+
+bin/shaders.o: $(BIN_DIR) $(SHADER_FILES)
+	ld -r -b binary -o bin/shaders.o $(SHADER_FILES)
 
 #~DEBUG
 debug:
