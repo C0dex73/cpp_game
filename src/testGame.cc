@@ -2,6 +2,7 @@
 #include "displayManager.hh"
 #include "gameTime.hh"
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace cdxg {
 
