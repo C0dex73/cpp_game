@@ -1,6 +1,7 @@
 #ifndef CDXG_DISPLAY_MANAGER
 #define CDXG_DISPLAY_MANAGER
 
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <string>
 
