@@ -14,7 +14,7 @@ SHADER_DIR=./assets
 SHADER_EXTENSION=.glsl
 CFLAGS=-mwindows -Wall -std=c++17 -I./include
 C2OFLAGS=-W
-ADDITIONALOBJFILES=lib/glad.o
+ADDITIONALOBJFILES=lib/glad.o bin/rawShaders.o
 O2EXEFLAGS=-lglfw3 -lopengl32
 
 #~PROCESSED VAR
@@ -46,7 +46,7 @@ $(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION) $(INCLUDE)/%$(HEADEREXT
 $(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION)
 	$(C) $(CFLAGS) -c -o $@ $< $(C2OFLAGS)
 
-$(BIN_DIR)/$(TEST_EXEC): $(TEST_OBJ)
+$(BIN_DIR)/$(TEST_EXEC): $(TEST_OBJ) $(ADDITIONALOBJFILES)
 	$(C) $(CFLAGS) -o $@ $^ $(O2EXEFLAGS)
 
 $(BIN_DIR)/%$(TEST_SUBEXT)$(OBJEXTENSION) : $(SRC_DIR)/%$(TEST_SUBEXT)$(SRCEXTENSION) $(SRC_DIR)/$(INCLUDE)/%$(TEST_SUBEXT).h
@@ -102,8 +102,8 @@ $(BIN_DIR)_dir :
 
 #~EXPLICIT DEPENDENCIES
 
-bin/shaders.o: $(BIN_DIR) $(SHADER_FILES)
-	ld -r -b binary -o bin/shaders.o $(SHADER_FILES)
+bin/rawShaders.o: $(BIN_DIR)_dir $(SHADER_FILES)
+	ld -r -b binary -o bin/rawShaders.o $(SHADER_FILES)
 
 #~DEBUG
 debug:
