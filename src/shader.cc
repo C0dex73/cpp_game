@@ -9,7 +9,7 @@ namespace cdxg {
     Shader::Shader(std::string *pstrVertexShader, std::string *pstrFragmentShader):
     mShaderProgramId(glCreateProgram())
     {
-        // TODO : separate that into specific shader classes and precompiled into files
+        // TODO : separate that into specific shader classes
         const char* vertexShader = pstrVertexShader->c_str();
         unsigned int vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertexShaderID, 1, &vertexShader, NULL);
