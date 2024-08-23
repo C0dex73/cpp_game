@@ -2,14 +2,19 @@
 #define CDXG_SHADER_CLASS
 
 #include <string>
+#include "strRawShaders.hh"
 
 namespace cdxg {
     class Shader {
         public:
-        const unsigned int mShaderProgramId;
-        Shader(std::string *pstrVertexShader, std::string *pstrFragmentShader);
+        const std::string *mpstrVertexShader;
+        const std::string *mpstrFragmentShader;
+        const unsigned int muiShaderProgramId;
+        Shader(RawShaderDuo *pShaders);
+        Shader(const std::string *pstrVertexShader, const std::string *pstrFragmentShader);
         ~Shader();
-
+        private:
+        void ShaderInitializer();
     }; // class Shader
 } // namespace cdxg
 
