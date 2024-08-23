@@ -14,7 +14,8 @@ namespace cdxg {
         Shader(const std::string *pstrVertexShader, const std::string *pstrFragmentShader);
         ~Shader();
         private:
-        void ShaderInitializer();
+        void Load();
+        void Use();
     }; // class Shader
 } // namespace cdxg
 

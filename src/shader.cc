@@ -12,7 +12,6 @@ namespace cdxg {
     {
         mpstrVertexShader = pShaders->VertexShader();
         mpstrFragmentShader = pShaders->FragmentShader();
-        ShaderInitializer();
     }
 
     Shader::Shader(const std::string *pstrVertexShader, const std::string *pstrFragmentShader):
@@ -20,7 +19,6 @@ namespace cdxg {
     {
         mpstrVertexShader = pstrVertexShader;
         mpstrFragmentShader = pstrFragmentShader;
-        ShaderInitializer();
     }
 
     Shader::~Shader()
@@ -28,20 +26,37 @@ namespace cdxg {
         glDeleteProgram(muiShaderProgramId);
     }
 
-    void Shader::ShaderInitializer()
+    void Shader::Load()
     {
+        //compile vertex shader
         const char* vertexShader = mpstrVertexShader->c_str();
-        unsigned int vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShaderID, 1, &vertexShader, NULL);
-        glCompileShader(vertexShaderID);
+        unsigned int vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertexShaderId, 1, &vertexShader, NULL);
+        glCompileShader(vertexShaderId);
 
+        //compile fragment shader
         const char* fragmentShader = mpstrFragmentShader->c_str();
-        unsigned int fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShaderID, 1, &fragmentShader, NULL);
-        glCompileShader(fragmentShaderID);
-        //TODO : handle shaders conpile error
+        unsigned int fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragmentShaderId, 1, &fragmentShader, NULL);
+        glCompileShader(fragmentShaderId);
 
-        // TODO : link shaders to program
+        //TODO : handle shaders compile error
+
+        //link both shaders and shader program
+        glAttachShader(muiShaderProgramId, vertexShaderId);
+        glAttachShader(muiShaderProgramId, fragmentShaderId);
+        glLinkProgram(muiShaderProgramId);
+
+        //delete shaders
+        glDetachShader(muiShaderProgramId, vertexShaderId);
+        glDetachShader(muiShaderProgramId, fragmentShaderId);
+        glDeleteShader(vertexShaderId);
+        glDeleteShader(fragmentShaderId);
+    }
+
+    void Shader::Use()
+    {
+        glUseProgram(muiShaderProgramId);
     }
 
 } // namespace cdxg
