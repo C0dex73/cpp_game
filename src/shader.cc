@@ -32,13 +32,27 @@ namespace cdxg {
         glShaderSource(vertexShaderId, 1, &vertexShader, NULL);
         glCompileShader(vertexShaderId);
 
+        int sucess;
+        char infoLog[512];
+        glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &sucess);
+        if(!sucess)
+        {
+            glGetShaderInfoLog(vertexShaderId, 512, NULL, infoLog);
+            printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s", infoLog);
+        }
+
         //compile fragment shader
         const char* fragmentShader = mpcpFragmentShader;
         unsigned int fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragmentShaderId, 1, &fragmentShader, NULL);
         glCompileShader(fragmentShaderId);
 
-        //TODO : handle shaders compile error
+        glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &sucess);
+        if(!sucess)
+        {
+            glGetShaderInfoLog(vertexShaderId, 512, NULL, infoLog);
+            printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s", infoLog);
+        }
 
         //link both shaders and shader program
         glAttachShader(muiShaderProgramId, vertexShaderId);
