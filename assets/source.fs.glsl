@@ -1,6 +1,7 @@
 #version 450 core
+layout(location = 0) out vec4 diffuseColor;
 in vec3 vertexColor;
 
-int main(){
-    gl_FragColor = vec4(vertexColor, 1.0);
+void main(){
+    diffuseColor = vec4(vertexColor, 0.0);
 };
