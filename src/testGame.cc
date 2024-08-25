@@ -25,6 +25,8 @@ namespace cdxg {
         
         mpShader = new Shader(&RawShaders::source);
 
+        // TODO : make classes for vbo and vao, possibly for any displayable object
+
         glGenBuffers(1, &vbo);
         glGenVertexArrays(1, &vao);
 
