@@ -79,7 +79,7 @@ ifeq (clean,$(firstword $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))))
 endif
 
 fullauto: build
-	$(BUILD_DIR)/$(EXEC) $(RUN_ARGS)
+	$(BIN_DIR)/$(EXEC) $(RUN_ARGS)
 
 rbin:
 	rm -rf $(BIN_DIR)
