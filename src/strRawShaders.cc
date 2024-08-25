@@ -1,25 +1,26 @@
 #include "strRawShaders.hh"
 
-// Get shaders from linked and compiled .glsl files
-// To get all the symbols names,
-// run make bin/rawShaders.o then run objdump -x bin/rawShaders.o
-extern const char const *__binary___assets_source_fs_glsl_start;
-extern const char const *__binary___assets_source_vs_glsl_start;
-
 namespace cdxg
 {
-    RawShaderDuo RawShaders::source = RawShaderDuo(__binary___assets_source_vs_glsl_start, __binary___assets_source_fs_glsl_start);
+    RawShaderDuo::RawShaderDuo(char *pcVs[2], char *pcFs[2]):
+    mpcVertexShader(pcVs[0]),
+    mpcFragmentShader(pcFs[0])
+    {
+        size_t vsSize = pcVs[1] - pcVs[0];
+        pcVs[0][vsSize-1] = ""[0];
 
-    RawShaderDuo::RawShaderDuo(const char const*vertexShader, const char const*fragmentShader) :
-    msstrVertexShader(vertexShader),
-    msstrFragmentShader(fragmentShader)
-    {}
-
-    const std::string *RawShaderDuo::FragmentShader(){
-        return &msstrFragmentShader;
+        size_t fsSize = pcFs[1] - pcFs[0];
+        pcFs[0][fsSize-1] = ""[0];
     }
 
-    const std::string *RawShaderDuo::VertexShader(){
-        return &msstrVertexShader;
+    char *RawShaderDuo::pVertexShader(){
+        return mpcVertexShader;
     }
+    char *RawShaderDuo::pFragmentShader(){
+        return mpcFragmentShader;
+    }
+
+    RawShaderDuo RawShaders::source = RawShaderDuo(
+       (char*[2]){ _binary___assets_source_vs_glsl_start, _binary___assets_source_vs_glsl_end},
+       (char*[2]){ _binary___assets_source_fs_glsl_start, _binary___assets_source_fs_glsl_end});
 } // namespace cdxg

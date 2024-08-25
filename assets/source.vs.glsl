@@ -7,4 +7,4 @@ out vec3 vertexColor;
 int main(){
     vertexColor = vec3(aColor);
     gl_position = vec4(aPos.xy, 0, 1.0);
-}
+};

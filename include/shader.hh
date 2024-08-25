@@ -7,15 +7,15 @@
 namespace cdxg {
     class Shader {
         public:
-        const std::string *mpstrVertexShader;
-        const std::string *mpstrFragmentShader;
-        const unsigned int muiShaderProgramId;
         Shader(RawShaderDuo *pShaders);
-        Shader(const std::string *pstrVertexShader, const std::string *pstrFragmentShader);
+        Shader(const char *const pstrVertexShader, const char *const pstrFragmentShader);
         ~Shader();
+        void Use();
         private:
         void Load();
-        void Use();
+        const unsigned int muiShaderProgramId;
+        const char *const mpcpVertexShader;
+        const char *const mpcpFragmentShader;
     }; // class Shader
 } // namespace cdxg
 

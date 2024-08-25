@@ -10,10 +10,8 @@ namespace cdxg
     {}
 
     void GameTemplate::Run(){
-        LoadComponents();
-
-        DisplayManager::CreateWindow(mInitialWidth, mInitialHeight, mInitialTitle);
         
+        DisplayManager::CreateWindow(mInitialWidth, mInitialHeight, mInitialTitle);
         Initialize();
 
         while(!glfwWindowShouldClose(DisplayManager::mpsWindow)){

@@ -8,18 +8,16 @@
 namespace cdxg {
 
     Shader::Shader(RawShaderDuo *pShaders):
-    muiShaderProgramId(glCreateProgram())
-    {
-        mpstrVertexShader = pShaders->VertexShader();
-        mpstrFragmentShader = pShaders->FragmentShader();
-    }
+    muiShaderProgramId(glCreateProgram()),
+    mpcpVertexShader(pShaders->pVertexShader()),
+    mpcpFragmentShader(pShaders->pFragmentShader())
+    {}
 
-    Shader::Shader(const std::string *pstrVertexShader, const std::string *pstrFragmentShader):
-    muiShaderProgramId(glCreateProgram())
-    {
-        mpstrVertexShader = pstrVertexShader;
-        mpstrFragmentShader = pstrFragmentShader;
-    }
+    Shader::Shader(const char *const pstrVertexShader, const char *const pstrFragmentShader):
+    muiShaderProgramId(glCreateProgram()),
+    mpcpVertexShader(pstrVertexShader),
+    mpcpFragmentShader(pstrFragmentShader)
+    {}
 
     Shader::~Shader()
     {
@@ -29,13 +27,13 @@ namespace cdxg {
     void Shader::Load()
     {
         //compile vertex shader
-        const char* vertexShader = mpstrVertexShader->c_str();
+        const char* vertexShader = mpcpVertexShader;
         unsigned int vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertexShaderId, 1, &vertexShader, NULL);
         glCompileShader(vertexShaderId);
 
         //compile fragment shader
-        const char* fragmentShader = mpstrFragmentShader->c_str();
+        const char* fragmentShader = mpcpFragmentShader;
         unsigned int fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragmentShaderId, 1, &fragmentShader, NULL);
         glCompileShader(fragmentShaderId);

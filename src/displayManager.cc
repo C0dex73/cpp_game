@@ -5,7 +5,6 @@
 #include <glad/glad.h>
 
 namespace cdxg {
-
     void DisplayManager::CreateWindow(int width, int height, std::string title){
         // initialize glfw
         if( !glfwInit() )
@@ -18,6 +17,7 @@ namespace cdxg {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // We want OpenGL 4.6 core
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_RESIZABLE, 0); // We don't want resizable window
 
         // creates the window
         mpsWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
@@ -27,13 +27,13 @@ namespace cdxg {
             return;
         } // if no window
 
-        //make the new window focused and not resizable
-        glfwFocusWindow(mpsWindow);
-        glfwWindowHint(GLFW_RESIZABLE, 0);
+        //opengl init
+        gladLoadGL();
 
+        //make the new window focused
+        glfwFocusWindow(mpsWindow);        
 
-
-        //init opengl and glad
+        //init glad
         glfwMakeContextCurrent(mpsWindow);
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
         {
@@ -41,11 +41,12 @@ namespace cdxg {
             glfwTerminate();
             return;
         } // if glad cant init
-        glViewport(0, 0, 800, 800);
-    } // void CloseWindow()
+
+        //tells opengl window size
+        glViewport(0, 0, width, height);
+    } // void InitializeDisplayAPI()
 
     void DisplayManager::CloseWindow(){
-        glfwTerminate();
+    glfwTerminate();
     } // void CloseWindow()
-
 } // namespace cdxg
