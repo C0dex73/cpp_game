@@ -11,8 +11,8 @@ namespace cdxg {
         Shader(const char *const pstrVertexShader, const char *const pstrFragmentShader);
         ~Shader();
         void Use();
-        private:
         void Load();
+        private:
         const unsigned int muiShaderProgramId;
         const char *const mpcpVertexShader;
         const char *const mpcpFragmentShader;

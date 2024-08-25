@@ -25,26 +25,25 @@ namespace cdxg {
         
         mpShader = new Shader(&RawShaders::source);
 
-        unsigned int vao;
-        unsigned int vbo;
-
         glGenBuffers(1, &vbo);
         glGenVertexArrays(1, &vao);
 
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-        float vertices[] = {
-            -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-            0.5f, -0.5f, 1.0f, 1.0f, 1.0f
-        };
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(vertices[0]), (void*)0);
+        glEnableVertexAttribArray(0);
 
-        
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(vertices[0]), (void*)(2*sizeof(vertices[0])));
+        glEnableVertexAttribArray(1);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
+        // Initialize shader
+        mpShader->Load();
     } // void Initialize()
 
     void TestGame::Update(){
@@ -57,6 +56,12 @@ namespace cdxg {
         //blank screen w/ bg color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        mpShader->Use();
+
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
         
         // display the current frame and init the next one
         glfwSwapBuffers(DisplayManager::mpsWindow);
