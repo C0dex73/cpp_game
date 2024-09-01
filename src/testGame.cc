@@ -23,7 +23,9 @@ namespace cdxg {
         GameTime::msDeltaTimeSec = 0.0f;
         GameTime::msTotalTimeSec = glfwGetTime();
         
-        mpShader = new Shader(&RawShaders::source);
+        mpShader = new Shader(&RawShaders::rgb);
+
+        // TODO : make classes for vbo and vao, possibly for any displayable object
 
         glGenBuffers(1, &vbo);
         glGenVertexArrays(1, &vao);
@@ -54,7 +56,7 @@ namespace cdxg {
 
     void TestGame::Render(){
         //blank screen w/ bg color
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         mpShader->Use();

@@ -12,7 +12,8 @@ INCLUDE=./include
 HEADEREXTENSION=.hh
 SHADER_DIR=./assets
 SHADER_EXTENSION=.glsl
-CFLAGS=-mwindows -Wall -std=c++17 -I./include
+BUILD_CFLAGS=-mwindows
+CFLAGS=-Wall -std=c++17 -I./include
 C2OFLAGS=-W
 ADDITIONALOBJFILES=lib/glad.o bin/rawShaders.o
 O2EXEFLAGS=-lglfw3 -lopengl32
@@ -67,7 +68,7 @@ reset:
 	rm -rf $(BUILD_DIR)
 
 build: $(BIN_DIR)_dir $(BUILD_DIR)_dir $(BIN_DIR)/$(EXEC)
-	cp $(BIN_DIR)/*.exe $(BUILD_DIR)
+	$(C) $(BUILD_CFLAGS) $(CFLAGS) -o $(BUILD_DIR)/$(EXEC) $(OBJ) $(ADDITIONALOBJFILES) $(O2EXEFLAGS)
 	set -- *.dll \
     ; if [ -e "$$1" ]; then \
         cp $(BIN_DIR)/*.dll $(BUILD_DIR); \
@@ -78,7 +79,7 @@ ifeq (clean,$(firstword $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))))
 endif
 
 fullauto: build
-	$(BUILD_DIR)/$(EXEC) $(RUN_ARGS)
+	$(BIN_DIR)/$(EXEC) $(RUN_ARGS)
 
 rbin:
 	rm -rf $(BIN_DIR)
@@ -91,6 +92,8 @@ run: $(BUILD_DIR)/$(EXEC) | build
 
 test: $(BIN_DIR)_dir $(BIN_DIR)/$(TEST_EXEC)
 	$(BIN_DIR)/$(TEST_EXEC) $(RUN_ARGS)
+
+shaders: bin/rawShaders.o
 
 #~DIRECTORIES
 

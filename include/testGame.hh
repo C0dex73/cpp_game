@@ -14,14 +14,14 @@ namespace cdxg {
         void Initialize() override;
         void Update() override;
         void Render() override;
-        const float vertices[30] = {
-            -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        float vertices[30] = {
+            -1.0f, 0.5f, 1.0f, 0.0f, 0.0f,
+            -1.0f, -0.5f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.5f, 0.0f, 0.0f, 1.0f,
 
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-            0.5f, -0.5f, 1.0f, 1.0f, 1.0f
+            -1.0f, -0.5f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.5f, 0.0f, 0.0f, 1.0f,
+            0.0f, -0.5f, 1.0f, 1.0f, 1.0f
         };
         private:
         unsigned int vao;
