@@ -13,6 +13,7 @@ namespace cdxg {
         void Use();
         void Load();
         private:
+        bool mbLoaded;
         const unsigned int muiShaderProgramId;
         const char *const mpcpVertexShader;
         const char *const mpcpFragmentShader;

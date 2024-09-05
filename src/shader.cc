@@ -3,6 +3,7 @@
 #include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <stdexcept>
 
 
 namespace cdxg {
@@ -10,13 +11,15 @@ namespace cdxg {
     Shader::Shader(RawShaderDuo *pShaders):
     muiShaderProgramId(glCreateProgram()),
     mpcpVertexShader(pShaders->pVertexShader()),
-    mpcpFragmentShader(pShaders->pFragmentShader())
+    mpcpFragmentShader(pShaders->pFragmentShader()),
+    mbLoaded(false)
     {}
 
     Shader::Shader(const char *const pstrVertexShader, const char *const pstrFragmentShader):
     muiShaderProgramId(glCreateProgram()),
     mpcpVertexShader(pstrVertexShader),
-    mpcpFragmentShader(pstrFragmentShader)
+    mpcpFragmentShader(pstrFragmentShader),
+    mbLoaded(false)
     {}
 
     Shader::~Shader()
@@ -68,6 +71,7 @@ namespace cdxg {
 
     void Shader::Use()
     {
+        throw std::runtime_error("A shader has been used before loaded.");
         glUseProgram(muiShaderProgramId);
     }
 
