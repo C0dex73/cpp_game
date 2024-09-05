@@ -1,6 +1,9 @@
 #ifndef CDXG_VERTICES
 #define CDXG_VERTICES
 
+#include <type_traits>
+#include <stdexcept>
+
 namespace cdxg
 {
     struct Vertex {
@@ -16,6 +19,11 @@ namespace cdxg
     struct VertexRGBA : public VertexRGB {
         float a = 0.0f;
     };
+
+    template<typename T> void initializeVertexAttribArrays(unsigned int vao){
+        throw std::invalid_argument("Tried to enableVertexAttribArray of an unhandled class");
+    }
+
 } // namespace cdxg
 
 
