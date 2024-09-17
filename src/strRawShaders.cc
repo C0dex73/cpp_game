@@ -22,5 +22,17 @@ namespace cdxg
 
     RawShaderDuo RawShaders::source = RawShaderDuo(
        (char*[2]){ _binary___assets_source_vs_glsl_start, _binary___assets_source_vs_glsl_end},
-       (char*[2]){ _binary___assets_source_fs_glsl_start, _binary___assets_source_fs_glsl_end});
+       (char*[2]){ _binary___assets_source_fs_glsl_start, _binary___assets_source_fs_glsl_end}
+    );
+
+    RawShaderDuo RawShaders::rgb = RawShaderDuo(
+        (char*[2]){_binary___assets_rgb_vs_glsl_start, _binary___assets_rgb_vs_glsl_end},
+        (char*[2]){_binary___assets_rgb_fs_glsl_start, _binary___assets_rgb_fs_glsl_end}
+    );
+
+    RawShaderDuo RawShaders::rgba = RawShaderDuo(
+        (char*[2]){_binary___assets_rgba_vs_glsl_start, _binary___assets_rgba_vs_glsl_end},
+        (char*[2]){_binary___assets_rgba_fs_glsl_start, _binary___assets_rgba_fs_glsl_end}
+    );
+
 } // namespace cdxg

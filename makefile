@@ -2,8 +2,8 @@
 SRC_DIR=./src
 BIN_DIR=./bin
 BUILD_DIR=./build
-EXEC=cdxg.exe
-TEST_EXEC=test.exe
+EXEC=cdxg
+TEST_EXEC=test
 TEST_SUBEXT=.test
 C=g++
 SRCEXTENSION=.cc
@@ -12,10 +12,11 @@ INCLUDE=./include
 HEADEREXTENSION=.hh
 SHADER_DIR=./assets
 SHADER_EXTENSION=.glsl
-CFLAGS=-mwindows -Wall -std=c++17 -I./include
+BUILD_CFLAGS=
+CFLAGS=-Wall -std=c++20 -I./include
 C2OFLAGS=-W
 ADDITIONALOBJFILES=lib/glad.o bin/rawShaders.o
-O2EXEFLAGS=-lglfw3 -lopengl32
+O2EXEFLAGS=-lglfw -lGL -Xlinker -Map=output.map
 
 #~PROCESSED VAR
 SHADER_FILES=$(wildcard $(SHADER_DIR)/*$(SHADER_EXTENSION))
@@ -67,7 +68,7 @@ reset:
 	rm -rf $(BUILD_DIR)
 
 build: $(BIN_DIR)_dir $(BUILD_DIR)_dir $(BIN_DIR)/$(EXEC)
-	cp $(BIN_DIR)/*.exe $(BUILD_DIR)
+	$(C) $(BUILD_CFLAGS) $(CFLAGS) -o $(BUILD_DIR)/$(EXEC) $(OBJ) $(ADDITIONALOBJFILES) $(O2EXEFLAGS)
 	set -- *.dll \
     ; if [ -e "$$1" ]; then \
         cp $(BIN_DIR)/*.dll $(BUILD_DIR); \
@@ -78,7 +79,7 @@ ifeq (clean,$(firstword $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))))
 endif
 
 fullauto: build
-	$(BUILD_DIR)/$(EXEC) $(RUN_ARGS)
+	$(BIN_DIR)/$(EXEC) $(RUN_ARGS)
 
 rbin:
 	rm -rf $(BIN_DIR)
@@ -92,6 +93,10 @@ run: $(BUILD_DIR)/$(EXEC) | build
 test: $(BIN_DIR)_dir $(BIN_DIR)/$(TEST_EXEC)
 	$(BIN_DIR)/$(TEST_EXEC) $(RUN_ARGS)
 
+shaders: bin/rawShaders.o
+
+glad: lib/glad.o
+
 #~DIRECTORIES
 
 $(BUILD_DIR)_dir:
@@ -104,6 +109,11 @@ $(BIN_DIR)_dir :
 
 bin/rawShaders.o: $(BIN_DIR)_dir $(SHADER_FILES)
 	ld -r -b binary -o bin/rawShaders.o $(SHADER_FILES)
+
+#TODO : find a way to automate this for all libs
+#^ NB : this is done to prevent .o file errors due to specific system dependencies.
+lib/glad.o: lib/glad.c
+	g++ -c -o lib/glad.o lib/glad.c
 
 #~DEBUG
 debug:
