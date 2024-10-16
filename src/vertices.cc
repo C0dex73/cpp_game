@@ -21,6 +21,11 @@ namespace cdxg
         y = _y;
     }
 
+    void Vertex::move(float _x, float _y){
+        x += _x;
+        y += _y;
+    }
+
     VertexRGB::VertexRGB()
     : Vertex(){
         r = 0.0f;

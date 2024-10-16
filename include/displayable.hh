@@ -58,14 +58,20 @@ namespace cdxg
 
             glBindVertexArray(0);
         };
+
+        void move(float x, float y){
+            for(int i = 0; i < mvVertices.size(); ++i){
+                mvVertices[i].move(x, y);
+            }
+            mbVerticesModified = true;
+            refreshVram();
+        }
         
         protected:
         friend class TestGame;
 
         void load()
         {
-            
-
             glGenVertexArrays(1, &muiVao);
             glBindVertexArray(muiVao);
             glGenBuffers(1, &muiVbo);
@@ -118,7 +124,6 @@ namespace cdxg
             if(forceRefresh || mbVerticesIndicesModified){
                 if(bindBuffers) { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, muiIbo); }
                 glBufferData(GL_ELEMENT_ARRAY_BUFFER, muivVerticesIndices.size()*sizeof(muivVerticesIndices[0]), &muivVerticesIndices[0], std::get<1>(matGlDrawType[meDrawTypeIndex]));
-                std::cout << muivVerticesIndices[0] << " " << muivVerticesIndices[5];
             }
             if(vertexArrayObjectCallbackID >= 0 && bindBuffers){
                 glBindVertexArray(vertexArrayObjectCallbackID);

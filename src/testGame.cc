@@ -43,6 +43,18 @@ namespace cdxg{
     } // void Initialize()
 
     void TestGame::Update(){
+        if(glfwGetKey(DisplayManager::mpsWindow, GLFW_KEY_LEFT) == GLFW_PRESS){
+            rectangle.move(-0.005, 0.0);
+        }
+        if(glfwGetKey(DisplayManager::mpsWindow, GLFW_KEY_RIGHT) == GLFW_PRESS){
+            rectangle.move(0.005, 0.0);
+        }
+        if(glfwGetKey(DisplayManager::mpsWindow, GLFW_KEY_UP) == GLFW_PRESS){
+            rectangle.move(0.0, 0.005);
+        }
+        if(glfwGetKey(DisplayManager::mpsWindow, GLFW_KEY_DOWN) == GLFW_PRESS){
+            rectangle.move(0.0, -0.005);
+        }
         //update GameTime
         GameTime::msDeltaTimeSec = glfwGetTime() - GameTime::msTotalTimeSec;
         GameTime::msTotalTimeSec = glfwGetTime();

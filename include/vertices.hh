@@ -13,6 +13,7 @@ namespace cdxg
         Vertex();
         Vertex(const Vertex &v);
         Vertex(float _x, float _y);
+        void move(float _x, float _y);
         float x;
         float y;
         friend bool operator==(const Vertex &v1, const Vertex &v2);
