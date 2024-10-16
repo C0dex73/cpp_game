@@ -13,10 +13,13 @@ HEADEREXTENSION=.hh
 SHADER_DIR=./assets
 SHADER_EXTENSION=.glsl
 BUILD_CFLAGS=
-CFLAGS=-Wall -std=c++20 -I./include
+DEBUG_CFLAGS=
+BUILD_FLAGS=-s
+DEBUG_FLAGS=
+CFLAGS=-Wall -std=c++20 -I./include -g
 C2OFLAGS=-W
 ADDITIONALOBJFILES=lib/glad.o bin/rawShaders.o
-O2EXEFLAGS=-lglfw -lGL -Xlinker -Map=output.map
+O2EXEFLAGS=-lglfw -lGL
 
 #~PROCESSED VAR
 SHADER_FILES=$(wildcard $(SHADER_DIR)/*$(SHADER_EXTENSION))
@@ -39,18 +42,18 @@ endif
 all: $(BIN_DIR)_dir $(BIN_DIR)/$(EXEC) $(BIN_DIR)/$(TEST_EXEC)
 
 $(BIN_DIR)/$(EXEC): $(OBJ) $(ADDITIONALOBJFILES)
-	$(C) $(CFLAGS) -o $@ $^ $(O2EXEFLAGS)
+	$(C) $(DEBUG_CFLAGS) $(CFLAGS) -o $@ $^ $(O2EXEFLAGS) $(DEBUG_FLAGS)
 
 $(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION) $(INCLUDE)/%$(HEADEREXTENSION)
-	$(C) $(CFLAGS) -c -o $@ $< $($@) $(C2OFLAGS)
+	$(C) $(CFLAGS) $(DEBUG_CFLAGS) -c -o $@ $< $($@) $(C2OFLAGS)
 
 $(BIN_DIR)/%$(OBJEXTENSION): $(SRC_DIR)/%$(SRCEXTENSION)
-	$(C) $(CFLAGS) -c -o $@ $< $(C2OFLAGS)
+	$(C) $(CFLAGS) $(DEBUG_CFLAGS) -c -o $@ $< $(C2OFLAGS)
 
 $(BIN_DIR)/$(TEST_EXEC): $(TEST_OBJ) $(ADDITIONALOBJFILES)
 	$(C) $(CFLAGS) -o $@ $^ $(O2EXEFLAGS)
 
-$(BIN_DIR)/%$(TEST_SUBEXT)$(OBJEXTENSION) : $(SRC_DIR)/%$(TEST_SUBEXT)$(SRCEXTENSION) $(SRC_DIR)/$(INCLUDE)/%$(TEST_SUBEXT).h
+$(BIN_DIR)/%$(TEST_SUBEXT)$(OBJEXTENSION): $(SRC_DIR)/%$(TEST_SUBEXT)$(SRCEXTENSION) $(SRC_DIR)/$(INCLUDE)/%$(HEADEREXTENSION)
 	$(C) $(CFLAGS) -c -o $@ $< $($@) $(C2OFLAGS)
 
 $(BIN_DIR)/%$(TEST_SUBEXT)$(OBJEXTENSION): $(SRC_DIR)/%$(TEST_SUBEXT)$(SRCEXTENSION)
@@ -68,7 +71,7 @@ reset:
 	rm -rf $(BUILD_DIR)
 
 build: $(BIN_DIR)_dir $(BUILD_DIR)_dir $(BIN_DIR)/$(EXEC)
-	$(C) $(BUILD_CFLAGS) $(CFLAGS) -o $(BUILD_DIR)/$(EXEC) $(OBJ) $(ADDITIONALOBJFILES) $(O2EXEFLAGS)
+	$(C) $(BUILD_CFLAGS) $(CFLAGS) -o $(BUILD_DIR)/$(EXEC) $(OBJ) $(ADDITIONALOBJFILES) $(O2EXEFLAGS) $(BUILD_FLAGS)
 	set -- *.dll \
     ; if [ -e "$$1" ]; then \
         cp $(BIN_DIR)/*.dll $(BUILD_DIR); \
@@ -114,6 +117,8 @@ bin/rawShaders.o: $(BIN_DIR)_dir $(SHADER_FILES)
 #^ NB : this is done to prevent .o file errors due to specific system dependencies.
 lib/glad.o: lib/glad.c
 	g++ -c -o lib/glad.o lib/glad.c
+
+src/displayable.cc : include/displayable.hh
 
 #~DEBUG
 debug:
