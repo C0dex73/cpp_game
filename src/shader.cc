@@ -7,7 +7,6 @@
 
 
 namespace cdxg {
-
     Shader::Shader(RawShaderDuo *pShaders):
     muiShaderProgramId(glCreateProgram()),
     mpcpVertexShader(pShaders->pVertexShader()),
@@ -27,8 +26,14 @@ namespace cdxg {
         glDeleteProgram(muiShaderProgramId);
     }
 
+    Shader **const Shader::defaultShader(){
+        return &mpDefault;
+    }
+
     void Shader::Load()
     {
+        if(mbLoaded) { return; }
+
         //compile vertex shader
         const char* vertexShader = mpcpVertexShader;
         unsigned int vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
@@ -67,12 +72,23 @@ namespace cdxg {
         glDetachShader(muiShaderProgramId, fragmentShaderId);
         glDeleteShader(vertexShaderId);
         glDeleteShader(fragmentShaderId);
+
+        mbLoaded = true;
     }
 
     void Shader::Use()
     {
-        throw std::runtime_error("A shader has been used before loaded.");
+        if(!mbLoaded) {
+            throw std::runtime_error("A shader has been used before loaded.");
+        }
         glUseProgram(muiShaderProgramId);
     }
 
+    void Shader::setDefaultShader(Shader *const defaultShader)
+    {
+        if(mpDefault != nullptr) { delete mpDefault; }
+        Shader::mpDefault = defaultShader;
+    }
+
+    Shader *Shader::mpDefault = nullptr;
 } // namespace cdxg

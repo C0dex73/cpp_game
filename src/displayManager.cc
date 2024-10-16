@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <string>
+#include "shader.hh"
 #include <glad/glad.h>
 
 namespace cdxg {
@@ -44,6 +45,11 @@ namespace cdxg {
 
         //tells opengl window size
         glViewport(0, 0, width, height);
+
+        //Init Default Shader
+        static Shader defaultShader = Shader(&RawShaders::source);
+        Shader::setDefaultShader(&defaultShader);
+        
     } // void InitializeDisplayAPI()
 
     void DisplayManager::CloseWindow(){
