@@ -1,7 +1,7 @@
 #include "testGame.hh"
 using namespace cdxg;
 
-// TODO : replace fprinf to MSGBOX as there is no console for this application
+// TODO : find a way to handle runtime errors for the user (error code ?)
 
 /**
  * The main function, called when the executable lauches
