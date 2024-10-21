@@ -2,6 +2,7 @@
 using namespace cdxg;
 
 // TODO : find a way to handle runtime errors for the user (error code ?)
+// TODO : ASAP document everything before it gets messier
 
 /**
  * The main function, called when the executable lauches
