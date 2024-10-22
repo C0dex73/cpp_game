@@ -3,6 +3,7 @@
 
 #include "gameTemplate.hh"
 #include "displayable.hh"
+#include "shader.hh"
 #include <vector>
 
 namespace cdxg {
@@ -18,9 +19,11 @@ namespace cdxg {
         std::vector<Displayable<VertexRGB>> rectangles;
         int state = -1;
         void addRectangle();
+        void removeRectangle();
         void processInput();
         std::vector<VertexRGB> vertices;
         std::vector<unsigned int> indices;
+        Shader mHighlightShader;
         int oldAddButtonState = 0;
         int oldSubButtonState = 0;
         int oldSpaceButtonState = 0;
