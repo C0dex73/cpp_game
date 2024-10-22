@@ -1,43 +1,49 @@
 #include "shader.hh"
-#include "strRawShaders.hh"
-#include <string>
+#include "rawShaderHolder.hh"
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <stdexcept>
+#include <iostream>
 
-
-namespace cdxg {
-    Shader::Shader(RawShaderDuo *pShaders):
-    muiShaderProgramId(glCreateProgram()),
-    mpcpVertexShader(pShaders->pVertexShader()),
-    mpcpFragmentShader(pShaders->pFragmentShader()),
-    mbLoaded(false)
+namespace cdxg
+{
+    Shader::Shader()
+    :mbLoaded(false)
+    ,muiShaderProgramId(0)
+    ,mpcVertexShader(_binary___assets_source_vs_glsl_start)
+    ,mpcFragmentShader(_binary___assets_source_fs_glsl_start)
     {}
 
-    Shader::Shader(const char *const pstrVertexShader, const char *const pstrFragmentShader):
-    muiShaderProgramId(glCreateProgram()),
-    mpcpVertexShader(pstrVertexShader),
-    mpcpFragmentShader(pstrFragmentShader),
-    mbLoaded(false)
+    Shader::Shader(char *vertexShader, char *fragmentShader)
+    :mbLoaded(false)
+    ,muiShaderProgramId(0)
+    ,mpcVertexShader(vertexShader)
+    ,mpcFragmentShader(fragmentShader)
     {}
 
     Shader::~Shader()
     {
+        if(!mbLoaded){ return; }
         glDeleteProgram(muiShaderProgramId);
     }
 
-    Shader **const Shader::defaultShader(){
-        return &mpDefault;
+    void Shader::Use()
+    {
+        if(!mbLoaded){
+            std::cout << "WARNING::SHADER::PROGRAM::USED_BEFORE_LOADED\n\tCounter-action : Loading shader" << std::endl;
+            Load();
+        }
+        glUseProgram(muiShaderProgramId);
     }
 
     void Shader::Load()
     {
         if(mbLoaded) { return; }
 
+        //create an opengl shader program
+        muiShaderProgramId = glCreateProgram();
+
         //compile vertex shader
-        const char* vertexShader = mpcpVertexShader;
         unsigned int vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShaderId, 1, &vertexShader, NULL);
+        glShaderSource(vertexShaderId, 1, &mpcVertexShader, NULL);
         glCompileShader(vertexShaderId);
 
         int sucess;
@@ -46,20 +52,19 @@ namespace cdxg {
         if(!sucess)
         {
             glGetShaderInfoLog(vertexShaderId, 512, NULL, infoLog);
-            printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s", infoLog);
+            std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
         }
 
         //compile fragment shader
-        const char* fragmentShader = mpcpFragmentShader;
         unsigned int fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShaderId, 1, &fragmentShader, NULL);
+        glShaderSource(fragmentShaderId, 1, &mpcFragmentShader, NULL);
         glCompileShader(fragmentShaderId);
 
         glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &sucess);
         if(!sucess)
         {
             glGetShaderInfoLog(vertexShaderId, 512, NULL, infoLog);
-            printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s", infoLog);
+            std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
         }
 
         //link both shaders and shader program
@@ -75,20 +80,4 @@ namespace cdxg {
 
         mbLoaded = true;
     }
-
-    void Shader::Use()
-    {
-        if(!mbLoaded) {
-            throw std::runtime_error("A shader has been used before loaded.");
-        }
-        glUseProgram(muiShaderProgramId);
-    }
-
-    void Shader::setDefaultShader(Shader *const defaultShader)
-    {
-        if(mpDefault != nullptr) { delete mpDefault; }
-        Shader::mpDefault = defaultShader;
-    }
-
-    Shader *Shader::mpDefault = nullptr;
 } // namespace cdxg

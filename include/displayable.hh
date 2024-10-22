@@ -19,7 +19,7 @@ namespace cdxg
     template<class Vtype = Vertex>
     class Displayable {
         public:
-        enum mGlDrawTypeIndices {
+        enum mGlDrawType {
             //IBO drawType is dynamic VBO drawType is dynamic
             DYNAMIC = 0,
             //IBO drawType is dynamic VBO drawType is dynamic
@@ -38,18 +38,24 @@ namespace cdxg
         Displayable()
         {
             testVertexType<Vtype>();
-            meDrawTypeIndex = Displayable<Vtype>::DYNAMIC;
-            mppShader = Shader::defaultShader();
+
+            muivVerticesIndices = std::vector<unsigned int>({0, 0, 0});
+            meDrawType = mGlDrawType::DYNAMIC;
+            mvVertices = std::vector<Vtype>({Vtype()});
+            mpShader = &defaultShader;
+            mpShader->Load();
+            muiVao = 0;
+            muiVbo = 0;
+            muiIbo = 0;
+            mbVerticesIndicesModified = false;
+            mbVerticesModified = false;
         };
-        Displayable(Displayable<Vtype>::mGlDrawTypeIndices drawTypeIndex)
-        {
-            testVertexType<Vtype>();
-            drawTypeIndex = meDrawTypeIndex;
-            mppShader = Shader::defaultShader();
-        };
+
+        ~Displayable(){}
+
         void draw()
         {
-            (*mppShader)->Use();
+            mpShader->Use();
 
             glBindVertexArray(muiVao);
 
@@ -99,15 +105,10 @@ namespace cdxg
             mbVerticesIndicesModified = true;
             if(bRefreshVram) { refreshVram(); }
         };
-        void setShader(Shader **shader)
-        {
-            mppShader = shader;
-            (*mppShader)->Load();
-        };
         void setShader(Shader *shader)
         {
             mpShader = shader;
-            setShader(&mpShader);
+            mpShader->Load();
         };
         void unload()
         {
@@ -119,31 +120,30 @@ namespace cdxg
             if(bindBuffers) { glBindVertexArray(muiVao); }
             if(forceRefresh || mbVerticesModified) {
                 if(bindBuffers) { glBindBuffer(GL_ARRAY_BUFFER, muiVbo); }
-                glBufferData(GL_ARRAY_BUFFER, mvVertices.size()*sizeof(mvVertices[0]), &mvVertices[0], std::get<0>(matGlDrawType[meDrawTypeIndex]));
+                glBufferData(GL_ARRAY_BUFFER, mvVertices.size()*sizeof(mvVertices[0]), &mvVertices[0], std::get<0>(mateGlDrawType[meDrawType]));
             }
             if(forceRefresh || mbVerticesIndicesModified){
                 if(bindBuffers) { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, muiIbo); }
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, muivVerticesIndices.size()*sizeof(muivVerticesIndices[0]), &muivVerticesIndices[0], std::get<1>(matGlDrawType[meDrawTypeIndex]));
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, muivVerticesIndices.size()*sizeof(muivVerticesIndices[0]), &muivVerticesIndices[0], std::get<1>(mateGlDrawType[meDrawType]));
             }
             if(vertexArrayObjectCallbackID >= 0 && bindBuffers){
                 glBindVertexArray(vertexArrayObjectCallbackID);
             }
         };
         private:
-        std::vector<unsigned int> muivVerticesIndices = {0, 0, 0};
-        mGlDrawTypeIndices meDrawTypeIndex;
-        std::vector<Vtype> mvVertices = {Vtype()};
-        static const std::tuple<GLenum, GLenum> matGlDrawType[];
-        Shader **mppShader;
+        std::vector<unsigned int> muivVerticesIndices;
+        mGlDrawType meDrawType;
+        std::vector<Vtype> mvVertices;
         Shader *mpShader;
         unsigned int muiVao;
         unsigned int muiVbo;
         unsigned int muiIbo;
-        bool mbVerticesModified = false;
-        bool mbVerticesIndicesModified = false;
+        bool mbVerticesModified;
+        bool mbVerticesIndicesModified;
+        static const std::tuple<GLenum, GLenum> mateGlDrawType[];
     }; // class Displayable
     template<class Vtype>
-    const std::tuple<GLenum, GLenum> Displayable<Vtype>::matGlDrawType[] = {
+    const std::tuple<GLenum, GLenum> Displayable<Vtype>::mateGlDrawType[] = {
         std::tuple<GLenum, GLenum>(GL_DYNAMIC_DRAW, GL_DYNAMIC_DRAW), //DYNAMIC (DYNAMIC_DYNAMIC)
         std::tuple<GLenum, GLenum>(GL_STATIC_DRAW, GL_STATIC_DRAW), //STATIC (STATIC_STATIC)
         std::tuple<GLenum, GLenum>(GL_DYNAMIC_DRAW, GL_STATIC_DRAW), //DYNAMIC_STATIC

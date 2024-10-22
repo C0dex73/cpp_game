@@ -44,12 +44,7 @@ namespace cdxg {
         } // if glad cant init
 
         //tells opengl window size
-        glViewport(0, 0, width, height);
-
-        //Init Default Shader
-        static Shader defaultShader = Shader(&RawShaders::source);
-        Shader::setDefaultShader(&defaultShader);
-        
+        glViewport(0, 0, width, height);        
     } // void InitializeDisplayAPI()
 
     void DisplayManager::CloseWindow(){

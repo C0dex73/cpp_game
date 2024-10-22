@@ -38,7 +38,6 @@ namespace cdxg{
         ++state;
         rectangles[state].setVerticesIndices(indices, false);
         rectangles[state].setVertices(vertices, false);
-        rectangles[state].setShader(Shader::defaultShader());
         rectangles[state].load();
     }
 
