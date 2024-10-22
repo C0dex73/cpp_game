@@ -62,11 +62,22 @@ namespace cdxg{
     }
 
     void TestGame::processInput(){
+
+        //* '+' key from keypad => add rect
         if(glfwGetKey(DisplayManager::mpsWindow, GLFW_KEY_KP_ADD) == GLFW_PRESS && oldAddButtonState == GLFW_RELEASE){
             addRectangle();
         }
+
+        //* esc key => close window
+        if(glfwGetKey(DisplayManager::mpsWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+            glfwSetWindowShouldClose(DisplayManager::mpsWindow, true);
+        }
+
+
+        //the instructions after this point are useless/could cause errors if no rectangle exists
         if(state == -1) { return; }
 
+        //* directional keys => move rect
         if(glfwGetKey(DisplayManager::mpsWindow, GLFW_KEY_LEFT) == GLFW_PRESS){
             rectangles[state].move(-0.005, 0.0);
         }
@@ -80,9 +91,12 @@ namespace cdxg{
             rectangles[state].move(0.0, -0.005);
         }
         
+        //* '-' key from keypad => remove a rect
         if(glfwGetKey(DisplayManager::mpsWindow, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS && oldSubButtonState == GLFW_RELEASE){
             removeRectangle();
         }
+
+        //* space key => switch between rects
         if(glfwGetKey(DisplayManager::mpsWindow, GLFW_KEY_SPACE) == GLFW_PRESS && oldSpaceButtonState == GLFW_RELEASE){
             //remove highlight shader from current rectangle
             rectangles[state].setShader(&defaultShader);
