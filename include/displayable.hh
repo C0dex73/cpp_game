@@ -51,7 +51,10 @@ namespace cdxg
             mbVerticesModified = false;
         };
 
-        ~Displayable(){}
+        ~Displayable()
+        {
+            unload();
+        }
 
         void draw()
         {
@@ -113,6 +116,8 @@ namespace cdxg
         void unload()
         {
             glDeleteVertexArrays(1, &muiVao);
+            glDeleteBuffers(1, &muiVbo);
+            glDeleteBuffers(1, muiIbo);
         };
         void refreshVram(bool forceRefresh = false, bool bindBuffers = true, int vertexArrayObjectCallbackID = 0)
         {
