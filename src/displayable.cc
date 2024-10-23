@@ -1,9 +1,3 @@
 #include "displayable.hh"
 
-namespace cdxg
-{
-    /*
-     * the displayable object being a class template,
-     * most if not all of it is defined in the header file
-     */  
-} // namespace cdxg
+//the definitions are in ../include/templates/displayable.tcc as Displayable is a templated class
